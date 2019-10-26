@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">SocialApp</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="nama">Nama</string>
+    <string name="noHP">No HP</string>
+    <string name="daftar">Daftar</string>
+    <string name="update">Update</string>
+</resources>
