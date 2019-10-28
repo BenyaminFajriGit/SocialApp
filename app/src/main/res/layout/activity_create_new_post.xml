@@ -12,20 +12,20 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="Title"
-        app:layout_constraintBottom_toTopOf="@+id/et_postcontent"
+        app:layout_constraintBottom_toTopOf="@+id/et_postcaption"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.748" />
 
     <EditText
-        android:id="@+id/et_postcontent"
+        android:id="@+id/et_postcaption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="216dp"
         android:ems="10"
         android:inputType="textMultiLine"
-        android:hint="Content"
+        android:hint="Caption"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
