@@ -13,10 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
     private RecyclerView rvPosts;
+    private FloatingActionButton fabCreatePost;
     private ArrayList<Post> list = new ArrayList<>();
 
     public HomeFragment() {
@@ -34,17 +37,22 @@ public class HomeFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         rvPosts = view.findViewById(R.id.rv_posts_list);
+        fabCreatePost = view.findViewById(R.id.fab_createpost);
+
         rvPosts.setHasFixedSize(true);
         list.addAll(PostsData.getListData());
+
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         PostsAdapter postsAdapter = new PostsAdapter(list);
         rvPosts.setAdapter(postsAdapter);
+
         postsAdapter.setOnItemClickCallback(new OnItemClickCallback() {
             @Override
             public void onItemClicked(Post data) {
                 showPost(data);
             }
         });
+
         return view;
     }
 
@@ -53,6 +61,11 @@ public class HomeFragment extends Fragment {
         postDetailIntent.putExtra("post_title", post.getTitle());
         postDetailIntent.putExtra("post_caption", post.getCaption());
         startActivity(postDetailIntent);
+    }
+
+    private void showCreateNewPost() {
+        Intent createNewPostIntent = new Intent(getContext(), CreateNewPostActivity.class);
+        startActivity(createNewPostIntent);
     }
 
 }
