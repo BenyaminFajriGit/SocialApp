@@ -35,7 +35,7 @@ public class YourPostsFragment extends Fragment {
         rvPosts.setHasFixedSize(true);
         list.addAll(PostsData.getListData());
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
-        YourPostsAdapter ypostsAdapter = new YourPostsAdapter(list);
+        YourPostsAdapter ypostsAdapter = new YourPostsAdapter(list,getContext());
         rvPosts.setAdapter(ypostsAdapter);
         ypostsAdapter.setOnItemClickCallback(new OnItemClickCallback() {
             @Override

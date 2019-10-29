@@ -15,8 +15,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btnDaftar = (Button) findViewById(R.id.buttonDaftar);
-        btnDashboard = (Button)findViewById(R.id.btn_dashboard);
+        btnDaftar = findViewById(R.id.buttonDaftar);
+        btnDashboard = findViewById(R.id.btn_dashboard);
         btnDaftar.setOnClickListener(this);
         btnDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
