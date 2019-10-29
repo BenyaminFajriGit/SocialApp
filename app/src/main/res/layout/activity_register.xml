@@ -97,7 +97,7 @@
             android:layout_marginLeft="4dp"
             android:layout_marginTop="48dp"
             android:layout_marginBottom="16dp"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/button_rounded_blue"
             android:textColor="@android:color/white"
             android:text="@string/daftar"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -17,7 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener {
     private RecyclerView rvPosts;
     private FloatingActionButton fabCreatePost;
     private ArrayList<Post> list = new ArrayList<>();
@@ -52,6 +52,7 @@ public class HomeFragment extends Fragment {
                 showPost(data);
             }
         });
+        fabCreatePost.setOnClickListener(this);
 
         return view;
     }
@@ -63,9 +64,9 @@ public class HomeFragment extends Fragment {
         startActivity(postDetailIntent);
     }
 
-    private void showCreateNewPost() {
+    @Override
+    public void onClick(View view) {
         Intent createNewPostIntent = new Intent(getContext(), CreateNewPostActivity.class);
         startActivity(createNewPostIntent);
     }
-
 }

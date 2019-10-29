@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="356dp"
-        android:background="#0277BD"
+        android:background="@drawable/button_rounded_blue"
         android:text="Submit"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
