@@ -10,18 +10,37 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Password;
+import com.mobsandgeeks.saripaar.annotation.Pattern;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 
-public class EditProfil extends AppCompatActivity implements View.OnClickListener  {
+public class EditProfil extends AppCompatActivity implements View.OnClickListener, Validator.ValidationListener {
+
     private Button btnDaftar;
-    private EditText editTextUsername;
+
+
+    @NotEmpty
+    @Password(min=8,scheme=Password.Scheme.ALPHA_NUMERIC,message = "Password at least 8 and character must containt alphabet and number ")
     private EditText editTextPassword;
+
+    @NotEmpty
     private EditText editTextNama;
-    private EditText editTextNoHP;
+
+    @NotEmpty
+    @Pattern(regex =  "[0-9]+",message = "Phone only number are accepted")
+    private EditText editTextno_hp;
+
+    private Validator validator;
+
     String username;//ini diisi extra intent
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,17 +48,21 @@ public class EditProfil extends AppCompatActivity implements View.OnClickListene
         btnDaftar= (Button) findViewById(R.id.btDaftar);
         editTextPassword = (EditText) findViewById(R.id.password);
         editTextNama = (EditText) findViewById(R.id.nama);
-        editTextNoHP = (EditText) findViewById(R.id.noHP);
+        editTextno_hp = (EditText) findViewById(R.id.noHP);
         btnDaftar.setOnClickListener(this);
         username="test" ;//ini diisi extra intent
         getUser();
+        validator=new Validator(this);
+        validator.setValidationListener(this);
 
 
     }
 
     @Override
-    public void onClick(View view) {
-        updateUser();
+    public void onClick(View view)
+    {
+        validator.validate();
+
     }
 
     private void getUser(){
@@ -60,8 +83,11 @@ public class EditProfil extends AppCompatActivity implements View.OnClickListene
 
             @Override
             protected String doInBackground(Void... params) {
+                HashMap<String,String> hashMap = new HashMap<>();
+                hashMap.put("id_user","1");//ini ganti username
                 RequestHandler rh = new RequestHandler();
-                String s = rh.sendGetRequestParam("http://192.168.1.45/socialAppWS/index.php/User/get/",username);
+
+                String s = rh.sendPostRequest("http://frozenbits.tech/socialAppWS/DataUser/getDataUser",hashMap);
                 System.out.println(s);
                 return s;
             }
@@ -73,15 +99,24 @@ public class EditProfil extends AppCompatActivity implements View.OnClickListene
 
     private void showUser(String json){
         try {
-            JSONArray result = new JSONArray(json);
-            JSONObject c = result.getJSONObject(0);
-            String password = c.getString("password");
-            String nama = c.getString("nama");
-            String noHP = c.getString("noHP");
+            JSONObject jsonObject = new JSONObject(json);
+            boolean status= jsonObject.getBoolean("status");
+            String message= jsonObject.getString("message");
+            if(status){
+                JSONArray result = jsonObject.getJSONArray("data");
+                JSONObject c = result.getJSONObject(0);
+                String password = c.getString("password");
+                String nama = c.getString("nama");
+                String no_hp = c.getString("no_hp");
 
-            editTextPassword.setText(password);
-            editTextNama.setText(nama);
-            editTextNoHP.setText(noHP);
+                editTextPassword.setText(password);
+                editTextNama.setText(nama);
+                editTextno_hp.setText(no_hp);
+            }else{
+                Toast.makeText(EditProfil.this,message,Toast.LENGTH_LONG).show();
+                finish();
+            }
+
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -91,7 +126,7 @@ public class EditProfil extends AppCompatActivity implements View.OnClickListene
     private void updateUser(){
         final String password = editTextPassword.getText().toString().trim();
         final String nama = editTextNama.getText().toString().trim();
-        final String noHP= editTextNoHP.getText().toString().trim();
+        final String no_hp= editTextno_hp.getText().toString().trim();
 
         class UpdateUser extends AsyncTask<Void,Void,String>{
             ProgressDialog loading;
@@ -114,7 +149,7 @@ public class EditProfil extends AppCompatActivity implements View.OnClickListene
                 hashMap.put("username",username);
                 hashMap.put("password",password);
                 hashMap.put("nama",nama);
-                hashMap.put("noHP",noHP);
+                hashMap.put("no_hp",no_hp);
 
                 RequestHandler rh = new RequestHandler();
 
@@ -126,6 +161,27 @@ public class EditProfil extends AppCompatActivity implements View.OnClickListene
 
         UpdateUser uu = new UpdateUser();
         uu.execute();
+    }
+
+    @Override
+    public void onValidationSucceeded() {
+        updateUser();
+        Toast.makeText(this, "pProfil Updated Successfully", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(this);
+            // Display error messages
+            if (view instanceof EditText) {
+                ((EditText) view).setError(message);
+            } else {
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }
 
