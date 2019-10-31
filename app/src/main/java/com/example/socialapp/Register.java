@@ -21,6 +21,9 @@ import com.mobsandgeeks.saripaar.annotation.Order;
 import com.mobsandgeeks.saripaar.annotation.Password;
 import com.mobsandgeeks.saripaar.annotation.Pattern;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,6 +35,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
     private Button btnDaftar;
 
     @NotEmpty
+    @Length(max = 12, min = 6, message = "Input must be between 6 and 12 characters")
     private EditText editTextUsername;
 
     @NotEmpty
@@ -42,7 +46,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
     private EditText editTextNama;
 
     @NotEmpty
-    @Pattern(regex =  "[0-9]+",message = "Phone only number are accepted")
+    @Pattern(regex =  "[0-9]+",message = "only number are accepted")
     private EditText editTextNoHP;
 
     private Validator validator;
@@ -88,7 +92,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 loading.dismiss();
-                Toast.makeText(Register.this,s,Toast.LENGTH_LONG).show();
+                isSuccess(s);
             }
 
             @Override
@@ -106,15 +110,14 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
         }
 
         AddUser au = new AddUser();
-        System.out.println(au.execute());
+        au.execute();
     }
 
 
     @Override
     public void onValidationSucceeded() {
         this.register();
-        Toast.makeText(this, "Successfully register", Toast.LENGTH_SHORT).show();
-        finish();
+
     }
 
     @Override
@@ -128,6 +131,24 @@ public class Register extends AppCompatActivity implements View.OnClickListener,
             } else {
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             }
+        }
+    }
+
+    private void isSuccess(String json){
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            boolean status= jsonObject.getBoolean("status");
+            String message= jsonObject.getString("message");
+            if(status){
+                Toast.makeText(this, "Successfully register", Toast.LENGTH_SHORT).show();
+                finish();
+            }else{
+                Toast.makeText(this, "Username is already used!", Toast.LENGTH_SHORT).show();
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 }
