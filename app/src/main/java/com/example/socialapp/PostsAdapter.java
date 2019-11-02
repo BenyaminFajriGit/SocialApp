@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import com.example.socialapp.model.Post;
+
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.CardViewViewHolder>{
     private ArrayList<Post> listPost;
     private OnItemClickCallback onItemClickCallback;
@@ -33,8 +35,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.CardViewView
     public void onBindViewHolder(@NonNull final CardViewViewHolder cardViewViewHolder, int i) {
         Post post = listPost.get(i);
 
-        cardViewViewHolder.tvTitle.setText(post.getTitle());
-        cardViewViewHolder.tvCaption.setText(post.getCaption());
+        cardViewViewHolder.tvTitle.setText(post.getId_user());
+        cardViewViewHolder.tvCaption.setText(post.getPost());
 
         cardViewViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

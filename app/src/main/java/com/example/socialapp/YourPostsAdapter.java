@@ -7,11 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+
+import com.example.socialapp.model.Post;
 
 public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.CardViewViewHolder>  {
     private ArrayList<Post> listPost;
@@ -42,8 +45,9 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Card
     public void onBindViewHolder(@NonNull final CardViewViewHolder cardViewViewHolder, int i) {
         Post post = listPost.get(i);
 
-        cardViewViewHolder.tvTitle.setText(post.getTitle());
-        cardViewViewHolder.tvCaption.setText(post.getCaption());
+        cardViewViewHolder.tvTitle.setText(post.getId_user());
+        cardViewViewHolder.tvCaption.setText(post.getPost());
+        cardViewViewHolder.postContent = post.getPost();
 
         cardViewViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +66,7 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Card
     class CardViewViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView tvTitle, tvCaption;
         ImageButton ibEditPost, ibDeletePost;
+        String postContent;
 
         public CardViewViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -78,6 +83,7 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Card
         public void onClick(View view) {
             if (view == ibEditPost) {
                 Intent editPostIntent = new Intent(ctx,EditPostActivity.class);
+                editPostIntent.putExtra("post_content",postContent);
                 ctx.startActivity(editPostIntent);
             } else if(view == ibDeletePost) {
                 //TODO: delete certain post

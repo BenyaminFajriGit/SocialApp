@@ -5,18 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EditPostActivity">
-    <EditText
-        android:id="@+id/et_posttitle_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Title "
-        app:layout_constraintBottom_toTopOf="@+id/et_postcaption_edit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.748" />
 
     <EditText
         android:id="@+id/et_postcaption_edit"
@@ -25,7 +13,7 @@
         android:layout_marginTop="216dp"
         android:ems="10"
         android:inputType="textLongMessage|text"
-        android:text="Content "
+        android:text="Content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

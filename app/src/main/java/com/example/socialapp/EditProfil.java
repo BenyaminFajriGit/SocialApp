@@ -199,7 +199,7 @@ public class EditProfil extends AppCompatActivity implements View.OnClickListene
             boolean status= jsonObject.getBoolean("status");
             String message= jsonObject.getString("message");
             if(status){
-                Toast.makeText(this, "Profil Updated Successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Profile Updated Successfully", Toast.LENGTH_SHORT).show();
                 finish();
             }else{
                 Toast.makeText(this, "Username is already used!", Toast.LENGTH_SHORT).show();
