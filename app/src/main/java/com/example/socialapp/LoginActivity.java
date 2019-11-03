@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.JsonReader;
@@ -42,6 +44,9 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.et_password);
     }
 
+
+    private String id_user, nama, username;
+    private JSONObject userData;
     public void login(View v){
         final String usr, pass;
         usr = etUsername.getText().toString();
@@ -80,8 +85,8 @@ public class LoginActivity extends AppCompatActivity {
                     JSONArray rawUserData = result.getJSONArray("data");
                     String rud = result.getString("data");
                     //Log.d("rawuserdata",rud); //get "data" key from json object
-                    JSONObject userData = rawUserData.getJSONObject(0); //create inner json object
-                    String id_user = userData.getString("id_user");
+                    userData = rawUserData.getJSONObject(0); //create inner json object
+                    id_user = userData.getString("id_user");
                     //Log.d("iduser",id_user); //get "id_user" key from inner json object
 
                     if (result.getBoolean("status")){
@@ -94,10 +99,9 @@ public class LoginActivity extends AppCompatActivity {
                 } catch (JSONException e){
                     e.printStackTrace();
                 }
-                Log.d("datapull",dataPull);
+                //Log.d("datapull",dataPull); //get dataPull, basically the same as the "res" variable
+                //isi: {"status":true,"message":"Data Ditemukan","data":[{"id_user":"10","nama":"asd","username":"fbitsfbits","password":"8068c76c7376bc08e2836ab26359d4a4","no_hp":"123"}]}
                 return dataPull;
-                //OK hasil query udah bener, tinggal benerin ini kenapa error di bagian isSuccess()
-                //cek lagi nanti, gue pengen tidur.
             }
         }
         Login login = new Login();
@@ -107,15 +111,32 @@ public class LoginActivity extends AppCompatActivity {
 
     private void isSuccess(String json){
         try {
-            Log.d("something", json);
+            //Log.d("something", json); //data check
             JSONObject jsonObject = new JSONObject(json);
+            //commented for future access reference
             boolean status= jsonObject.getBoolean("status");
             String message= jsonObject.getString("message");
-            JSONArray jA = jsonObject.getJSONArray("data");
 
             if(status){
-                //Toast.makeText(this, "Successfully logged in", Toast.LENGTH_SHORT).show();
-                Toast.makeText(this, jA.getString(0) , Toast.LENGTH_SHORT).show();
+
+                Context appContext = MainActivity.getAppContext();
+                //create new sharedpreference to store login details
+                //assign data values
+                nama = userData.getString("nama");
+                username = userData.getString("username");
+
+                //Full link: https://stackoverflow.com/questions/9771061/how-to-save-login-information-locally-in-android
+                //begin
+                SharedPreferences loginData = appContext.getSharedPreferences("Login", MODE_PRIVATE);
+                SharedPreferences.Editor loginDataEdit = loginData.edit();
+                loginDataEdit.putString("username",username );
+                loginDataEdit.putString("nama",nama);
+                loginDataEdit.putString("id_user",id_user);
+
+                loginDataEdit.commit();
+                //end
+
+                Toast.makeText(this, "Logged in!" , Toast.LENGTH_SHORT).show();
                 finish();
                 startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
             } else {
