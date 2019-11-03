@@ -30,6 +30,7 @@ import org.json.JSONObject;
 public class HomeFragment extends Fragment implements View.OnClickListener {
     private RecyclerView rvPosts;
     private FloatingActionButton fabCreatePost;
+    private PostsAdapter postsAdapter;
     private ArrayList<Post> list = new ArrayList<>();
 
     public HomeFragment() {
@@ -54,7 +55,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         rvPosts.setHasFixedSize(true);
 
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
-        PostsAdapter postsAdapter = new PostsAdapter(list);
+        postsAdapter = new PostsAdapter(list);
         rvPosts.setAdapter(postsAdapter);
 
         postsAdapter.setOnItemClickCallback(new OnItemClickCallback() {
@@ -127,7 +128,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     post.setTime(pst.getString("waktu"));
                     list.add(post);
                 }
-
+                postsAdapter.notifyDataSetChanged();
             }else{
                 Toast.makeText(getContext(),message,Toast.LENGTH_LONG).show();
                 getActivity().finish();

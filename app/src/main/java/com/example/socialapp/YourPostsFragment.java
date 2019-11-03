@@ -26,6 +26,7 @@ import org.json.JSONObject;
 public class YourPostsFragment extends Fragment {
     private RecyclerView rvPosts;
     private ArrayList<Post> list = new ArrayList<>();
+    private YourPostsAdapter ypostsAdapter;
 
     public YourPostsFragment() {
         // Required empty public constructor
@@ -46,9 +47,8 @@ public class YourPostsFragment extends Fragment {
         rvPosts = view.findViewById(R.id.rv_your_posts_list);
 
         rvPosts.setHasFixedSize(true);
-//        list.addAll(PostsData.getListData());
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
-        YourPostsAdapter ypostsAdapter = new YourPostsAdapter(list,getContext());
+        ypostsAdapter = new YourPostsAdapter(list,getContext());
         rvPosts.setAdapter(ypostsAdapter);
         ypostsAdapter.setOnItemClickCallback(new OnItemClickCallback() {
             @Override
@@ -114,7 +114,7 @@ public class YourPostsFragment extends Fragment {
                     post.setTime(pst.getString("waktu"));
                     list.add(post);
                 }
-
+                ypostsAdapter.notifyDataSetChanged();
             }else{
                 Toast.makeText(getContext(),message,Toast.LENGTH_LONG).show();
                 getActivity().finish();
