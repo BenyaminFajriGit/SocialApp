@@ -11,9 +11,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.JsonReader;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -23,13 +26,22 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
-    private Button btnSignUp;
+    private Button btnSignUp, btnSignIn;
     private EditText etUsername, etPassword;
+
+    //MAIN APP CONTEXT FOR THE WHOLE APP
+    private static Context appContext;
+    public static Context getAppContext(){
+        return appContext;
+    }
+    //====================================
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        appContext = getApplicationContext();
 
         btnSignUp = findViewById(R.id.btn_signup);
         btnSignUp.setOnClickListener(new View.OnClickListener() {
@@ -40,14 +52,40 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        btnSignIn = findViewById(R.id.btn_signin);
+        btnSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                login();
+            }
+        });
+
         etUsername = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);
+
+        TextView.OnEditorActionListener enterListener = new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView etPassword, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_NULL
+                        && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    login();
+                }
+                return true;
+            }
+        };
+
+        etPassword.setOnEditorActionListener(enterListener);
+
+
     }
+
+
 
 
     private String id_user, nama, username;
     private JSONObject userData;
-    public void login(View v){
+
+    public void login(){
         final String usr, pass;
         usr = etUsername.getText().toString();
         pass = etPassword.getText().toString();
@@ -118,8 +156,6 @@ public class LoginActivity extends AppCompatActivity {
             String message= jsonObject.getString("message");
 
             if(status){
-
-                Context appContext = MainActivity.getAppContext();
                 //create new sharedpreference to store login details
                 //assign data values
                 nama = userData.getString("nama");

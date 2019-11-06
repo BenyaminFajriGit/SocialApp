@@ -11,11 +11,11 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button btnDaftar, btnDashboard, btnLogin, btnLogout;
-    private static Context appContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        appContext = getApplicationContext();
+
         setContentView(R.layout.activity_main);
         btnDaftar = findViewById(R.id.buttonDaftar);
         btnDashboard = findViewById(R.id.btn_dashboard);
@@ -43,9 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    public static Context getAppContext(){
-        return appContext;
-    }
+
 
     @Override
     public void onClick(View view) {

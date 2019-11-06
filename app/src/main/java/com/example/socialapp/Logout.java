@@ -17,7 +17,7 @@ public class Logout extends AppCompatActivity {
     }
 
     public static void logout(){
-        Context appContext = MainActivity.getAppContext();
+        Context appContext = LoginActivity.getAppContext();
 
         //Empty the SharedPreferences
         //Full link: https://stackoverflow.com/questions/4503807/how-to-empty-the-sharedpreferences-storage-in-android
