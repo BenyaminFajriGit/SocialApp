@@ -1,7 +1,7 @@
 package com.example.socialapp.model;
 
 public class Post {
-    private String id_post,id_user,post,time;
+    private String id_post,id_user,post,time,name;
 
     public String getId_post() {
         return id_post;
@@ -33,5 +33,13 @@ public class Post {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

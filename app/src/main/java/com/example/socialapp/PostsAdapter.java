@@ -35,7 +35,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.CardViewView
     public void onBindViewHolder(@NonNull final CardViewViewHolder cardViewViewHolder, int i) {
         Post post = listPost.get(i);
 
-        cardViewViewHolder.tvTitle.setText(post.getId_user());
+        cardViewViewHolder.tvName.setText(post.getName());
         cardViewViewHolder.tvCaption.setText(post.getPost());
 
         cardViewViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -53,11 +53,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.CardViewView
     }
 
     class CardViewViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle, tvCaption;
+        TextView tvName, tvCaption;
 
         public CardViewViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTitle = itemView.findViewById(R.id.tv_post_title);
+            tvName = itemView.findViewById(R.id.tv_post_name);
             tvCaption = itemView.findViewById(R.id.tv_post_caption);
         }
     }

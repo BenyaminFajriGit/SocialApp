@@ -17,7 +17,7 @@ public class PostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
 
-        TextView tvPostTitle = findViewById(R.id.tv_posttitle);
+        TextView tvPostName = findViewById(R.id.tv_postname);
 
         TextView tvPostCaption = findViewById(R.id.tv_postcaption);
 
@@ -30,10 +30,10 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
-        String postTitle = getIntent().getStringExtra("post_title");
+        String postName = getIntent().getStringExtra("post_name");
         String postCaption = getIntent().getStringExtra("post_caption");
 
-        tvPostTitle.setText(postTitle);
+        tvPostName.setText(postName);
         tvPostCaption.setText(postCaption);
     }
 }

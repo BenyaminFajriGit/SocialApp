@@ -45,7 +45,7 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Card
     public void onBindViewHolder(@NonNull final CardViewViewHolder cardViewViewHolder, int i) {
         Post post = listPost.get(i);
 
-        cardViewViewHolder.tvTitle.setText(post.getId_user());
+        cardViewViewHolder.tvName.setText(post.getName());
         cardViewViewHolder.tvCaption.setText(post.getPost());
         cardViewViewHolder.postContent = post.getPost();
 
@@ -64,13 +64,13 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Card
     }
 
     class CardViewViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView tvTitle, tvCaption;
+        TextView tvName, tvCaption;
         ImageButton ibEditPost, ibDeletePost;
         String postContent;
 
         public CardViewViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTitle = itemView.findViewById(R.id.tv_ypost_title);
+            tvName = itemView.findViewById(R.id.tv_ypost_name);
             tvCaption = itemView.findViewById(R.id.tv_ypost_caption);
             ibEditPost = itemView.findViewById(R.id.ib_editpost);
             ibDeletePost = itemView.findViewById(R.id.ib_deletepost);

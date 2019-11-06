@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,10 +24,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class YourPostsFragment extends Fragment {
+public class YourPostsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private RecyclerView rvPosts;
     private ArrayList<Post> list = new ArrayList<>();
     private YourPostsAdapter ypostsAdapter;
+    private SwipeRefreshLayout srlYourPosts;
 
     public YourPostsFragment() {
         // Required empty public constructor
@@ -45,6 +47,7 @@ public class YourPostsFragment extends Fragment {
         getYourPosts();
 
         rvPosts = view.findViewById(R.id.rv_your_posts_list);
+        srlYourPosts = view.findViewById(R.id.srl_your_posts);
 
         rvPosts.setHasFixedSize(true);
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -56,6 +59,10 @@ public class YourPostsFragment extends Fragment {
                 showPost(data);
             }
         });
+
+        srlYourPosts.setColorSchemeResources(R.color.colorAccent);
+        srlYourPosts.setOnRefreshListener(this);
+
         return view;
     }
 
@@ -112,6 +119,7 @@ public class YourPostsFragment extends Fragment {
                     post.setId_user(pst.getString("id_user"));
                     post.setPost(pst.getString("post"));
                     post.setTime(pst.getString("waktu"));
+                    post.setName(pst.getString("nama"));
                     list.add(post);
                 }
                 ypostsAdapter.notifyDataSetChanged();
@@ -124,5 +132,12 @@ public class YourPostsFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        list.clear();
+        getYourPosts();
+        srlYourPosts.setRefreshing(false);
     }
 }

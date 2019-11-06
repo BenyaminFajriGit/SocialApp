@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,11 +28,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class HomeFragment extends Fragment implements View.OnClickListener {
+public class HomeFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
     private RecyclerView rvPosts;
     private FloatingActionButton fabCreatePost;
     private PostsAdapter postsAdapter;
     private ArrayList<Post> list = new ArrayList<>();
+    private SwipeRefreshLayout srlPosts;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -51,6 +53,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         rvPosts = view.findViewById(R.id.rv_posts_list);
         fabCreatePost = view.findViewById(R.id.fab_createpost);
+        srlPosts = view.findViewById(R.id.srl_posts);
 
         rvPosts.setHasFixedSize(true);
 
@@ -65,13 +68,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
         fabCreatePost.setOnClickListener(this);
+        srlPosts.setColorSchemeResources(R.color.colorAccent);
+        srlPosts.setOnRefreshListener(this);
 
         return view;
     }
 
     private void showPost(Post post) {
         Intent postDetailIntent = new Intent(getContext(), PostActivity.class);
-        postDetailIntent.putExtra("post_title", post.getId_user());
+        postDetailIntent.putExtra("post_name", post.getName());
         postDetailIntent.putExtra("post_caption", post.getPost());
         startActivity(postDetailIntent);
     }
@@ -126,6 +131,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     post.setId_user(pst.getString("id_user"));
                     post.setPost(pst.getString("post"));
                     post.setTime(pst.getString("waktu"));
+                    post.setName(pst.getString("nama"));
                     list.add(post);
                 }
                 postsAdapter.notifyDataSetChanged();
@@ -138,5 +144,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        list.clear();
+        getPosts();
+        srlPosts.setRefreshing(false);
     }
 }
