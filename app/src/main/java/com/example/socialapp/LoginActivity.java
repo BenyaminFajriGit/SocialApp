@@ -116,28 +116,30 @@ public class LoginActivity extends AppCompatActivity {
 
                 RequestHandler rh = new RequestHandler();
                 String res = rh.sendPostRequest("http://frozenbits.tech/socialAppWS/DataUser/validateLogin", params);
-                //Log.d("res",res); //Get fetch result
+                Log.d("res",res); //Get fetch result
                 String dataPull = "";
                 try{
                     JSONObject result = new JSONObject(res);
-                    JSONArray rawUserData = result.getJSONArray("data");
-                    String rud = result.getString("data");
-                    //Log.d("rawuserdata",rud); //get "data" key from json object
-                    userData = rawUserData.getJSONObject(0); //create inner json object
-                    id_user = userData.getString("id_user");
-                    //Log.d("iduser",id_user); //get "id_user" key from inner json object
+                    if(result.getBoolean("status")){ //kondisi login berhasil
+                        JSONArray rawUserData = result.getJSONArray("data");
+                        String rud = result.getString("data");
+                        Log.d("rawuserdata",rud); //get "data" key from json object
+                        userData = rawUserData.getJSONObject(0); //create inner json object
+                        id_user = userData.getString("id_user");
+                        Log.d("iduser",id_user); //get "id_user" key from inner json object
 
-                    if (result.getBoolean("status")){
                         rh = new RequestHandler();
                         params = new HashMap<>();
                         params.put("id_user", id_user);
 
                         dataPull = rh.sendPostRequest("http://frozenbits.tech/socialAppWS/DataUser/getDataUser",params);
+                    } else { //kondisi login gagal
+                        return res;
                     }
                 } catch (JSONException e){
                     e.printStackTrace();
                 }
-                //Log.d("datapull",dataPull); //get dataPull, basically the same as the "res" variable
+                Log.d("datapull",dataPull); //get dataPull, basically the same as the "res" variable
                 //isi: {"status":true,"message":"Data Ditemukan","data":[{"id_user":"10","nama":"asd","username":"fbitsfbits","password":"8068c76c7376bc08e2836ab26359d4a4","no_hp":"123"}]}
                 return dataPull;
             }
@@ -148,12 +150,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void isSuccess(String json){
+        Log.d("Line0","Line0");
+        Log.d("SomethingOuter", json);
+        Log.d("SomethingEmpty", String.valueOf(json.isEmpty()));
         try {
-            //Log.d("something", json); //data check
+            Log.d("SomethingTry", json); //data check
             JSONObject jsonObject = new JSONObject(json);
+            Log.d("Line1", "Line1");
             //commented for future access reference
             boolean status= jsonObject.getBoolean("status");
+            Log.d("Line2", "Line2");
             String message= jsonObject.getString("message");
+            Log.d("Line3", "Line3");
 
             if(status){
                 //create new sharedpreference to store login details
@@ -175,6 +183,8 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(this, "Logged in!" , Toast.LENGTH_SHORT).show();
                 //finish();
                 startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                etUsername.setText("");
+                etPassword.setText("");
             } else {
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             }
@@ -182,6 +192,7 @@ public class LoginActivity extends AppCompatActivity {
 
         } catch (JSONException e) {
             e.printStackTrace();
+            //Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }
     }
 
