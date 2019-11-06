@@ -26,7 +26,7 @@ public class Logout extends AppCompatActivity {
         SharedPreferences.Editor loginDataEdit = loginData.edit();
 
         //debug line for sharedpreferences check
-        Toast.makeText(appContext, "Bye, "+loginData.getString("username", "but there's no username stored") , Toast.LENGTH_SHORT).show();
+        Toast.makeText(appContext, "Bye, "+loginData.getString("username", "but you're not logged in yet!") , Toast.LENGTH_SHORT).show();
 
         loginDataEdit.clear();
         loginDataEdit.commit();

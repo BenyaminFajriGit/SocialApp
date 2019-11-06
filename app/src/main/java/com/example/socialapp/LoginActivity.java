@@ -173,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
                 //end
 
                 Toast.makeText(this, "Logged in!" , Toast.LENGTH_SHORT).show();
-                finish();
+                //finish();
                 startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
             } else {
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
