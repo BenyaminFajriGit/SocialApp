@@ -17,7 +17,7 @@ public class Logout extends AppCompatActivity {
     }
 
     public static void logout(){
-        Context appContext = MainActivity.getAppContext();
+        Context appContext = LoginActivity.getAppContext();
 
         //Empty the SharedPreferences
         //Full link: https://stackoverflow.com/questions/4503807/how-to-empty-the-sharedpreferences-storage-in-android
@@ -26,7 +26,7 @@ public class Logout extends AppCompatActivity {
         SharedPreferences.Editor loginDataEdit = loginData.edit();
 
         //debug line for sharedpreferences check
-        Toast.makeText(appContext, "Bye, "+loginData.getString("username", "but there's no username stored") , Toast.LENGTH_SHORT).show();
+        Toast.makeText(appContext, "Bye, "+loginData.getString("username", "but you're not logged in yet!") , Toast.LENGTH_SHORT).show();
 
         loginDataEdit.clear();
         loginDataEdit.commit();
