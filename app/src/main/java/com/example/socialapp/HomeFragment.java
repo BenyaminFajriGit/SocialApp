@@ -137,7 +137,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Swip
                 postsAdapter.notifyDataSetChanged();
             }else{
                 Toast.makeText(getContext(),message,Toast.LENGTH_LONG).show();
-                getActivity().finish();
+//                getActivity().finish();
             }
 
 
@@ -152,4 +152,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Swip
         getPosts();
         srlPosts.setRefreshing(false);
     }
+
+
 }

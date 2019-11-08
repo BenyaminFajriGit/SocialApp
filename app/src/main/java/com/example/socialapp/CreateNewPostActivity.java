@@ -3,6 +3,8 @@ package com.example.socialapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -29,6 +31,7 @@ public class CreateNewPostActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_new_post);
+
 
         btnSubmitPost = findViewById(R.id.btn_submit_post);
         etPostCaption = findViewById(R.id.et_postcaption);
@@ -68,7 +71,10 @@ public class CreateNewPostActivity extends AppCompatActivity implements View.OnC
             @Override
             protected String doInBackground(Void... v) {
                 HashMap<String,String> params = new HashMap<>();
-                params.put("id_user","1"); //will changed with user that already signed in
+                Context appContext = LoginActivity.getAppContext();
+                SharedPreferences loginData = appContext.getSharedPreferences("Login", MODE_PRIVATE);
+
+                params.put("id_user",loginData.getString("id_user","1"));
                 params.put("post",caption);
                 RequestHandler rh = new RequestHandler();
                 String res = rh.sendPostRequest("http://frozenbits.tech/socialAppWS/DataPost/addPost", params);

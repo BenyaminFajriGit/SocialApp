@@ -2,7 +2,9 @@ package com.example.socialapp;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -17,12 +19,15 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.example.socialapp.model.Post;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class YourPostsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private RecyclerView rvPosts;
@@ -92,10 +97,15 @@ public class YourPostsFragment extends Fragment implements SwipeRefreshLayout.On
             }
 
             @Override
-            protected String doInBackground(Void... params) {
+            protected String doInBackground(Void... v) {
+                HashMap<String,String> params = new HashMap<>();
+
+                Context appContext = LoginActivity.getAppContext();
+                SharedPreferences loginData = appContext.getSharedPreferences("Login", MODE_PRIVATE);
+
+                params.put("id_user",loginData.getString("id_user","1"));
                 RequestHandler rh = new RequestHandler();
-                //TODO: get all posts from certain user based on its id
-                String s = rh.sendGetRequest("http://frozenbits.tech/socialAppWS/index.php/DataPost/getDataPostAll");
+                String s = rh.sendPostRequest("http://frozenbits.tech/socialAppWS/index.php/DataPost/getPostByUserId", params);
 
                 return s;
             }
@@ -125,7 +135,7 @@ public class YourPostsFragment extends Fragment implements SwipeRefreshLayout.On
                 ypostsAdapter.notifyDataSetChanged();
             }else{
                 Toast.makeText(getContext(),message,Toast.LENGTH_LONG).show();
-                getActivity().finish();
+//                getActivity().finish();
             }
 
 
