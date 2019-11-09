@@ -41,9 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         appContext = getApplicationContext();
-
         btnSignUp = findViewById(R.id.btn_signup);
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(registerIntent);
             }
         });
-
         btnSignIn = findViewById(R.id.btn_signin);
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,10 +57,9 @@ public class LoginActivity extends AppCompatActivity {
                 login();
             }
         });
-
         etUsername = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);
-
+        //Function to login by pressing enter/return without clicking the button
         TextView.OnEditorActionListener enterListener = new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView etPassword, int actionId, KeyEvent event) {
@@ -76,20 +72,15 @@ public class LoginActivity extends AppCompatActivity {
         };
         etPassword.setOnEditorActionListener(enterListener);
 
-        //AUTOMATIC LOGIN=============
-        loginData = appContext.getSharedPreferences("Login", MODE_PRIVATE);
-
+        //=================START AUTOMATIC LOGIN=============
         //Check if login data exists. Choose from any value (username, user_id, etc).
+        loginData = appContext.getSharedPreferences("Login", MODE_PRIVATE);
         String uname = loginData.getString("username",null);
-
         if(uname!=null){
             startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
         }
-        //AUTO LOGIN END==============
+        //=================END AUTOMATIC LOGIN==============
     }
-
-
-
 
     private String id_user, nama, username;
     private JSONObject userData;
@@ -125,31 +116,33 @@ public class LoginActivity extends AppCompatActivity {
 
                 RequestHandler rh = new RequestHandler();
                 String res = rh.sendPostRequest("http://frozenbits.tech/socialAppWS/DataUser/validateLogin", params);
-                Log.d("res",res); //Get fetch result
+                //Log.d("res",res); //Get fetch result
                 String dataPull = "";
                 try{
                     JSONObject result = new JSONObject(res);
-                    if(result.getBoolean("status")){ //kondisi login berhasil
+                    if(result.getBoolean("status")){ //kondisi login berhasil, langsung login di sini
                         JSONArray rawUserData = result.getJSONArray("data");
                         String rud = result.getString("data");
-                        Log.d("rawuserdata",rud); //get "data" key from json object
+                        //Log.d("rawuserdata",rud); //get "data" key from json object
                         userData = rawUserData.getJSONObject(0); //create inner json object
                         id_user = userData.getString("id_user");
-                        Log.d("iduser",id_user); //get "id_user" key from inner json object
+                        //Log.d("iduser",id_user); //get "id_user" key from inner json object
 
                         rh = new RequestHandler();
                         params = new HashMap<>();
                         params.put("id_user", id_user);
 
                         dataPull = rh.sendPostRequest("http://frozenbits.tech/socialAppWS/DataUser/getDataUser",params);
-                    } else { //kondisi login gagal
+                    } else { //kondisi login gagal, aksinya diurus di isSuccess()
                         return res;
                     }
                 } catch (JSONException e){
                     e.printStackTrace();
                 }
-                Log.d("datapull",dataPull); //get dataPull, basically the same as the "res" variable
-                //isi: {"status":true,"message":"Data Ditemukan","data":[{"id_user":"10","nama":"asd","username":"fbitsfbits","password":"8068c76c7376bc08e2836ab26359d4a4","no_hp":"123"}]}
+                //Log.d("datapull",dataPull); //get dataPull, basically the same as the "res" variable
+                    //isi: {"status":true,"message":"Data Ditemukan",
+                    //      "data":[{"id_user":"10","nama":"asd","username":"fbitsfbits",
+                    //      "password":"8068c76c7376bc08e2836ab26359d4a4","no_hp":"123"}]}
                 return dataPull;
             }
         }
@@ -159,18 +152,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void isSuccess(String json){
-        Log.d("Line0","Line0");
-        Log.d("SomethingOuter", json);
-        Log.d("SomethingEmpty", String.valueOf(json.isEmpty()));
+        //Log.d("Line0","Line0");
+        //Log.d("SomethingOuter", json);
+        //Log.d("SomethingEmpty", String.valueOf(json.isEmpty()));
         try {
-            Log.d("SomethingTry", json); //data check
+            //Log.d("SomethingTry", json); //data check
             JSONObject jsonObject = new JSONObject(json);
-            Log.d("Line1", "Line1");
+            //Log.d("Line1", "Line1");
             //commented for future access reference
             boolean status= jsonObject.getBoolean("status");
-            Log.d("Line2", "Line2");
+            //Log.d("Line2", "Line2");
             String message= jsonObject.getString("message");
-            Log.d("Line3", "Line3");
+            //Log.d("Line3", "Line3");
 
             if(status){
                 //create new sharedpreference to store login details
@@ -190,20 +183,19 @@ public class LoginActivity extends AppCompatActivity {
                 //end
 
                 Toast.makeText(this, "Logged in!" , Toast.LENGTH_SHORT).show();
-                //finish();
+                //JANGAN pernah tambah finish() di LoginActivity.java
+                //alasan: biar bisa pake flag FLAG_ACTIVITY_SINGLE_TOP agar setelah logout jadi gak bisa tekan tombol back.
                 startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                //empty the input fields
                 etUsername.setText("");
                 etPassword.setText("");
             } else {
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             }
 
-
         } catch (JSONException e) {
             e.printStackTrace();
             //Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }
     }
-
-
 }
