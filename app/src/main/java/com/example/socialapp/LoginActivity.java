@@ -28,6 +28,7 @@ import java.util.HashMap;
 public class LoginActivity extends AppCompatActivity {
     private Button btnSignUp, btnSignIn;
     private EditText etUsername, etPassword;
+    private SharedPreferences loginData;
 
     //MAIN APP CONTEXT FOR THE WHOLE APP
     private static Context appContext;
@@ -73,10 +74,18 @@ public class LoginActivity extends AppCompatActivity {
                 return true;
             }
         };
-
         etPassword.setOnEditorActionListener(enterListener);
 
+        //AUTOMATIC LOGIN=============
+        loginData = appContext.getSharedPreferences("Login", MODE_PRIVATE);
 
+        //Check if login data exists. Choose from any value (username, user_id, etc).
+        String uname = loginData.getString("username",null);
+
+        if(uname!=null){
+            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+        }
+        //AUTO LOGIN END==============
     }
 
 
@@ -171,7 +180,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 //Full link: https://stackoverflow.com/questions/9771061/how-to-save-login-information-locally-in-android
                 //begin
-                SharedPreferences loginData = appContext.getSharedPreferences("Login", MODE_PRIVATE);
+                loginData = appContext.getSharedPreferences("Login", MODE_PRIVATE);
                 SharedPreferences.Editor loginDataEdit = loginData.edit();
                 loginDataEdit.putString("username",username );
                 loginDataEdit.putString("nama",nama);
