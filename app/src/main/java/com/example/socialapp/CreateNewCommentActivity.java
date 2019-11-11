@@ -27,6 +27,7 @@ public class CreateNewCommentActivity extends AppCompatActivity implements View.
     @NotEmpty
     private EditText etCommentCaption;
     private Validator validator;
+    private String postId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,8 @@ public class CreateNewCommentActivity extends AppCompatActivity implements View.
 
         btnSubmitComment = findViewById(R.id.btn_submit_comment);
         etCommentCaption = findViewById(R.id.et_comment);
+
+        postId = getIntent().getStringExtra("id_post_comment");
 
         btnSubmitComment.setOnClickListener(this);
         validator = new Validator(this);
@@ -72,7 +75,7 @@ public class CreateNewCommentActivity extends AppCompatActivity implements View.
                 HashMap<String,String> params = new HashMap<>();
                 Context appContext = LoginActivity.getAppContext();
                 SharedPreferences loginData = appContext.getSharedPreferences("Login", MODE_PRIVATE);
-                params.put("id_post","1"); //will changed with id post that has been clicked
+                params.put("id_post",postId);
                 params.put("id_user",loginData.getString("id_user","1"));
                 params.put("comment",caption);
                 RequestHandler rh = new RequestHandler();
@@ -93,10 +96,10 @@ public class CreateNewCommentActivity extends AppCompatActivity implements View.
             boolean status= jsonObject.getBoolean("status");
             String message= jsonObject.getString("message");
             if(status){
-                Toast.makeText(this, "Post Successfully added!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Comment Successfully added!", Toast.LENGTH_SHORT).show();
                 finish();
             }else{
-                Toast.makeText(this, "Adding post failed!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Adding comment failed!", Toast.LENGTH_SHORT).show();
             }
 
 

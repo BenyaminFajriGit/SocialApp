@@ -78,6 +78,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Swip
         Intent postDetailIntent = new Intent(getContext(), PostActivity.class);
         postDetailIntent.putExtra("post_name", post.getName());
         postDetailIntent.putExtra("post_caption", post.getPost());
+        postDetailIntent.putExtra("post_id",post.getId_post());
         startActivity(postDetailIntent);
     }
 

@@ -28,10 +28,14 @@ public class CommentsActivity extends AppCompatActivity {
         list.addAll(CommentsData.getListData());
 
         showRecyclerList();
+
+        final String postId = getIntent().getStringExtra("id_post");
+
         fabCreateComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent createCommentIntent = new Intent(getApplicationContext(),CreateNewCommentActivity.class);
+                createCommentIntent.putExtra("id_post_comment",postId);
                 startActivity(createCommentIntent);
             }
         });
