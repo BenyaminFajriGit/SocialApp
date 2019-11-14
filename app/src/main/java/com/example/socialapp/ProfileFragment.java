@@ -68,4 +68,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         Intent editProfil = new Intent(getContext(), EditProfil.class);
         startActivity(editProfil);
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        String usernameUpdate=loginData.getString("username","unknown");
+        if(!usernameUpdate.equalsIgnoreCase(username)){
+            username=usernameUpdate;
+            textUsername.setText(username);
+        }
+
+
+    }
 }

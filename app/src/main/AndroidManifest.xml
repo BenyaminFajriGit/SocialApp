@@ -17,7 +17,9 @@
         <activity android:name=".CreateNewPostActivity" />
         <activity android:name=".CreateNewCommentActivity" />
         <activity android:name=".MainActivity" />
+        <activity android:name=".EditPassword" />
         <activity android:name=".LoginActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

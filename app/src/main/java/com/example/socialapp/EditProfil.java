@@ -198,6 +198,11 @@ public class EditProfil extends AppCompatActivity implements View.OnClickListene
             String message= jsonObject.getString("message");
             if(status){
                 Toast.makeText(this, "Profile Updated Successfully", Toast.LENGTH_SHORT).show();
+                SharedPreferences loginData = appContext.getSharedPreferences("Login", MODE_PRIVATE);
+                SharedPreferences.Editor loginDataEdit = loginData.edit();
+                loginDataEdit.putString("username",editTextUsername.getText().toString());
+                loginDataEdit.putString("nama",editTextNama.getText().toString());
+                loginDataEdit.apply();
                 finish();
             }else{
                 Toast.makeText(this, "Username is already used!", Toast.LENGTH_SHORT).show();

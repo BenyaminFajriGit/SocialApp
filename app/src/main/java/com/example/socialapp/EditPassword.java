@@ -98,7 +98,7 @@ public class EditPassword extends AppCompatActivity implements View.OnClickListe
 
                 RequestHandler rh = new RequestHandler();
 
-                String s = rh.sendPostRequest("http://frozenbits.tech/socialAppWS/DataUser/updateData",hashMap);
+                String s = rh.sendPostRequest("http://frozenbits.tech/socialAppWS/DataUser/updatePassword",hashMap);
                 System.out.println(s);
                 return s;
             }
