@@ -150,4 +150,5 @@ public class YourPostsFragment extends Fragment implements SwipeRefreshLayout.On
         getYourPosts();
         srlYourPosts.setRefreshing(false);
     }
+
 }

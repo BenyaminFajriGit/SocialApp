@@ -1,6 +1,8 @@
 package com.example.socialapp;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -28,14 +30,12 @@ import java.util.List;
 public class EditProfil extends AppCompatActivity implements View.OnClickListener, Validator.ValidationListener {
 
     private Button btnDaftar;
-
+    private SharedPreferences loginData;
+    Context appContext ;
     @NotEmpty
     @Length(max = 12, min = 6, message = "Input must be between 6 and 12 characters")
     private EditText editTextUsername;
 
-    @NotEmpty
-    @Password(min=8,scheme=Password.Scheme.ALPHA_NUMERIC,message = "Password at least 8 and character must containt alphabet and number ")
-    private EditText editTextPassword;
 
     @NotEmpty
     @Length(max = 255, min = 1, message = "Input must be between 1 and 255 characters")
@@ -52,14 +52,16 @@ public class EditProfil extends AppCompatActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_profil);
+        appContext = LoginActivity.getAppContext();
+        loginData = appContext.getSharedPreferences("Login", MODE_PRIVATE);
+
         btnDaftar= (Button) findViewById(R.id.btDaftar);
         editTextUsername=(EditText) findViewById(R.id.username);
-        editTextPassword = (EditText) findViewById(R.id.password);
         editTextNama = (EditText) findViewById(R.id.nama);
         editTextno_hp = (EditText) findViewById(R.id.noHP);
         btnDaftar.setOnClickListener(this);
         getUser();
-        id=7;//ganti jadi yang diambil dari get extra atau variabel global login
+        id=Integer.parseInt(loginData.getString("id_user", "0")) ;//ganti jadi yang diambil dari get extra atau variabel global login
         validator=new Validator(this);
         validator.setValidationListener(this);
 
@@ -114,11 +116,9 @@ public class EditProfil extends AppCompatActivity implements View.OnClickListene
                 JSONArray result = jsonObject.getJSONArray("data");
                 JSONObject c = result.getJSONObject(0);
                 String username=c.getString("username");
-                String password = c.getString("password");
                 String nama = c.getString("nama");
                 String no_hp = c.getString("no_hp");
                 editTextUsername.setText(username);
-                editTextPassword.setText(password);
                 editTextNama.setText(nama);
                 editTextno_hp.setText(no_hp);
             }else{
@@ -134,7 +134,6 @@ public class EditProfil extends AppCompatActivity implements View.OnClickListene
 
     private void updateUser(){
         final String username= editTextUsername.getText().toString();
-        final String password = editTextPassword.getText().toString().trim();
         final String nama = editTextNama.getText().toString().trim();
         final String no_hp= editTextno_hp.getText().toString().trim();
 
@@ -158,7 +157,6 @@ public class EditProfil extends AppCompatActivity implements View.OnClickListene
                 HashMap<String,String> hashMap = new HashMap<>();
                 hashMap.put("id_user",Integer.toString(id));
                 hashMap.put("username",username);
-                hashMap.put("password",password);
                 hashMap.put("nama",nama);
                 hashMap.put("no_hp",no_hp);
 
@@ -200,6 +198,11 @@ public class EditProfil extends AppCompatActivity implements View.OnClickListene
             String message= jsonObject.getString("message");
             if(status){
                 Toast.makeText(this, "Profile Updated Successfully", Toast.LENGTH_SHORT).show();
+                SharedPreferences loginData = appContext.getSharedPreferences("Login", MODE_PRIVATE);
+                SharedPreferences.Editor loginDataEdit = loginData.edit();
+                loginDataEdit.putString("username",editTextUsername.getText().toString());
+                loginDataEdit.putString("nama",editTextNama.getText().toString());
+                loginDataEdit.apply();
                 finish();
             }else{
                 Toast.makeText(this, "Username is already used!", Toast.LENGTH_SHORT).show();
