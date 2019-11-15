@@ -6,6 +6,9 @@
     <string name="noHP">No HP</string>
     <string name="daftar">Daftar</string>
     <string name="update">Update</string>
+    <string name="oldPassword">Old Password</string>
+    <string name="newPassword">New Password</string>
+    <string name="editPassword">Edit Password</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
