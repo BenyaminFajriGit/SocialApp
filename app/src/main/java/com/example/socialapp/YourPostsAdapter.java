@@ -48,6 +48,7 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Card
         cardViewViewHolder.tvName.setText(post.getName());
         cardViewViewHolder.tvCaption.setText(post.getPost());
         cardViewViewHolder.postContent = post.getPost();
+        cardViewViewHolder.postId = post.getId_post();
 
         cardViewViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +67,7 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Card
     class CardViewViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView tvName, tvCaption;
         ImageButton ibEditPost, ibDeletePost;
-        String postContent;
+        String postContent, postId;
 
         public CardViewViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,6 +85,7 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Card
             if (view == ibEditPost) {
                 Intent editPostIntent = new Intent(ctx,EditPostActivity.class);
                 editPostIntent.putExtra("post_content",postContent);
+                editPostIntent.putExtra("id_post", postId);
                 ctx.startActivity(editPostIntent);
             } else if(view == ibDeletePost) {
                 //TODO: delete certain post
