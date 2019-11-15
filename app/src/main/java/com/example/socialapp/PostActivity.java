@@ -21,12 +21,17 @@ public class PostActivity extends AppCompatActivity {
 
         TextView tvPostCaption = findViewById(R.id.tv_postcaption);
 
+        TextView tvPostTime = findViewById(R.id.tv_posttime);
+
         String postName = getIntent().getStringExtra("post_name");
         String postCaption = getIntent().getStringExtra("post_caption");
+        String postTime = getIntent().getStringExtra("post_time");
         final String postId = getIntent().getStringExtra("post_id");
 
         tvPostName.setText(postName);
         tvPostCaption.setText(postCaption);
+        tvPostTime.setText(postTime);
+
 
         FloatingActionButton fabViewComments = findViewById(R.id.fab_commentpost);
         fabViewComments.setOnClickListener(new View.OnClickListener() {
