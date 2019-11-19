@@ -34,7 +34,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class CommentsActivity extends AppCompatActivity {
     private RecyclerView rvComments;
-    private ArrayList<Comment> list = new ArrayList<>();
+    private ArrayList<com.example.socialapp.model.Comment> list = new ArrayList<>();
     private CommentsAdapter ycommentsAdapter;
     //final String postId = getIntent().getStringExtra("id_post");
     private FloatingActionButton fabCreateComment;
@@ -51,6 +51,7 @@ public class CommentsActivity extends AppCompatActivity {
         fabCreateComment = findViewById(R.id.fab_createcomment);
         rvComments = findViewById(R.id.rv_comments_list);
         rvComments.setHasFixedSize(true);
+        rvComments.setLayoutManager(new LinearLayoutManager(LoginActivity.getAppContext()));
         ycommentsAdapter = new CommentsAdapter(list,LoginActivity.getAppContext());
         rvComments.setAdapter(ycommentsAdapter);
 
@@ -125,7 +126,7 @@ public class CommentsActivity extends AppCompatActivity {
                 JSONArray result = jsonObject.getJSONArray("data");
                 Log.d("afterJSONArray", "TEST");
                 for (int i = 0; i < result.length(); i++) {
-                    Comment comment = new Comment();
+                    com.example.socialapp.model.Comment comment = new com.example.socialapp.model.Comment();
                     JSONObject pst = result.getJSONObject(i);
                     comment.setId_post(pst.getString("id_post"));
                     comment.setId_user(pst.getString("id_user"));
