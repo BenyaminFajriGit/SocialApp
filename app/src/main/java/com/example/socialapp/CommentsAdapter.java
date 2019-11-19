@@ -8,17 +8,17 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.socialapp.model.Post;
+import com.example.socialapp.model.Comment;
 import java.util.ArrayList;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CardViewViewHolder>{
-    private ArrayList<com.example.socialapp.model.Comment> listComment;
+    private ArrayList<Comment> listComment;
     private Context ctx;
     private OnItemClickCallback onItemClickCallback;
 
 
 
-    public CommentsAdapter(ArrayList<com.example.socialapp.model.Comment> list, Context ctx) {
+    public CommentsAdapter(ArrayList<Comment> list, Context ctx) {
         this.listComment = list;
         this.ctx = ctx;
     }
@@ -33,7 +33,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CardVi
 
     @Override
     public void onBindViewHolder(@NonNull final CardViewViewHolder cardViewViewHolder, int i) {
-        com.example.socialapp.model.Comment comment = listComment.get(i);
+        Comment comment = listComment.get(i);
 
         cardViewViewHolder.tvUsername.setText(comment.getName());
         cardViewViewHolder.tvCaption.setText(comment.getComment());

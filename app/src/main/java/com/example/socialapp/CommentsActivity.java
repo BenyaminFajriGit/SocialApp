@@ -32,13 +32,13 @@ import org.json.JSONObject;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class CommentsActivity extends AppCompatActivity {
+public class CommentsActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     private RecyclerView rvComments;
-    private ArrayList<com.example.socialapp.model.Comment> list = new ArrayList<>();
+    private ArrayList<Comment> list = new ArrayList<>();
     private CommentsAdapter ycommentsAdapter;
     //final String postId = getIntent().getStringExtra("id_post");
     private FloatingActionButton fabCreateComment;
-
+    private SwipeRefreshLayout srlComments;
 
 
 
@@ -50,10 +50,14 @@ public class CommentsActivity extends AppCompatActivity {
         getYourComments();
         fabCreateComment = findViewById(R.id.fab_createcomment);
         rvComments = findViewById(R.id.rv_comments_list);
+        srlComments = findViewById(R.id.srl_comments);
         rvComments.setHasFixedSize(true);
         rvComments.setLayoutManager(new LinearLayoutManager(LoginActivity.getAppContext()));
         ycommentsAdapter = new CommentsAdapter(list,LoginActivity.getAppContext());
         rvComments.setAdapter(ycommentsAdapter);
+
+        srlComments.setColorSchemeResources(R.color.colorAccent);
+        srlComments.setOnRefreshListener(this);
 
 
 
@@ -100,7 +104,7 @@ public class CommentsActivity extends AppCompatActivity {
                 //Context appContext = LoginActivity.getAppContext();
                 //SharedPreferences loginData = appContext.getSharedPreferences("Login", MODE_PRIVATE);
 
-                params.put("id_post","1");
+                params.put("id_post",getIntent().getStringExtra("id_post"));
                 RequestHandler rh = new RequestHandler();
                 String s = rh.sendPostRequest("http://frozenbits.tech/socialAppWS/index.php/DataKomentar/getPostComment", params);
 
@@ -126,7 +130,7 @@ public class CommentsActivity extends AppCompatActivity {
                 JSONArray result = jsonObject.getJSONArray("data");
                 Log.d("afterJSONArray", "TEST");
                 for (int i = 0; i < result.length(); i++) {
-                    com.example.socialapp.model.Comment comment = new com.example.socialapp.model.Comment();
+                    Comment comment = new Comment();
                     JSONObject pst = result.getJSONObject(i);
                     comment.setId_post(pst.getString("id_post"));
                     comment.setId_user(pst.getString("id_user"));
@@ -151,5 +155,10 @@ public class CommentsActivity extends AppCompatActivity {
     }
 
 
-
+    @Override
+    public void onRefresh() {
+        list.clear();
+        getYourComments();
+        srlComments.setRefreshing(false);
+    }
 }
