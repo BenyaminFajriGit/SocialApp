@@ -88,9 +88,13 @@ public class YourPostsAdapter extends RecyclerView.Adapter<YourPostsAdapter.Card
                 editPostIntent.putExtra("id_post", postId);
                 ctx.startActivity(editPostIntent);
             } else if(view == ibDeletePost) {
-                //TODO: delete certain post
+                Intent deletePostIntent = new Intent(ctx,DeletePostActivity.class);
+                deletePostIntent.putExtra("post_content",postContent);
+                deletePostIntent.putExtra("id_post", postId);
+                ctx.startActivity(deletePostIntent);
             }
         }
     }
+
 
 }
